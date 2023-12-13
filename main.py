@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__, template_folder='template', static_url_path='/', static_folder='resource')
 
@@ -39,6 +39,11 @@ def login():
     username = request.form.get('username')
     password = request.form.get('password')
     return '用户名%s,密码为%s' % (username, password)
+
+# 重定向：是http协议本身的功能，重定向302状态码，在响应头里面通过指定location字段来告诉浏览器跳转
+@app.route('/red')
+def red():
+    return redirect(url_for('test'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
