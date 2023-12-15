@@ -1,11 +1,11 @@
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
-
+from controller import demo
 app = Flask(__name__, template_folder='template', static_url_path='/', static_folder='resource')
 app.config['SECRET_KEY'] = os.urandom(24)  # 24位 生成随机数种子  用于产生sessionID
 
-
+print(__name__)
 # 定义接口地址
 @app.route('/')
 def index():
@@ -83,6 +83,7 @@ def cookie():
     resp.set_cookie('passwd', '1234', max_age=30)
     # 无法在同一个接口中既设置cookie 又获取cookie
     return resp
+
 
 
 if __name__ == '__main__':
