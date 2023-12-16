@@ -5,36 +5,32 @@
     <title>Jinja2模板页面</title>
 </head>
 <body>
-    <div style="width: 300px; height: 800px; border: solid 2px red;
+<div style="width: 300px; height: 800px; border: solid 2px red;
         text-align: center; padding: 20px; line-height: 25px">
-        {# 使用{{}}引用模板变量，也可以进行基本运算，判断，循环等 #}
-        <span>你的登录账号为：{{session.get('username')}}</span><br/>
-        <span>这篇文章的标题：{{article.title}}</span><br/>
-        <span>文章的阅读次数：{{article.count + 1}}</span>
-        <br/><br/>
-
-        {% if count % 2 == 0 %}
+    {# 使用{{}}引用模板变量，也可以进行基本运算，判断，循环等 #}
+    <span>你的登录账号为：{{ session.get('username') }}</span><br/>
+    <span>这篇文章的标题：{{ article.title }}</span><br/>
+    <span>文章的阅读次数：{{ article.count + 1 }}</span>
+    <br/><br/>
+    {% if count % 2 == 0 %}
         <span>count可以被2整除，是一个偶数</span><br/><br/>
-        {% else %}
+    {% else %}
         <span>count不可以被2整除，是一个奇数</span><br/><br/>
-        {% endif %}
+    {% endif %}
+    {% set loop = count / 10 %}
+    {% set intloop = loop|int %}
+    {# Jinja2模板页面中不能调用python的函数 loop|int 使用过滤器(模板函数)将loop的数据类型修改为int #}
+    {% for i in range(intloop) %}
+        <span>当前循环第{{ i }}行</span><br>
+    {% endfor %}
+    {{ content | safe }} <br>
+    {{ content | truncate(20)}}<br>
+    {{ getTypes }} <br>
+    {{ getTypes['1'] }} <br>
+     <span>第二种方式</span><br/><br/>
+    {{ mytype() }}<br>
+    {{ '2222'|mylens}}
 
-        {% set loop = count / 10 %}    {# loop的值为10.0，是float类型 #}
-        {# 强制转换float为int型，默认情况下，Jinja2模板页面中不能调用Python的函数 #}
-        {% set intloop = loop | int %}  {# 使用过滤器将loop强制转换为int型 ==> int(loop) #}
-        {% for i in range(intloop) %}
-        <span>当前循环到第 {{i+1}} 行.</span><br/>
-        {% endfor %}
-
-        <span><br/>{{content}}</span><br/>
-        <span><br/>{{content | safe}}</span><br/>
-        <span><br/>{{content | length}}</span><br/>
-        <span><br/>{{content | safe | truncate(5) }}</span><br/><br/>
-
-        {{mytype()}}<br/><br/>
-        {{mytype()['2']}}<br/><br/>
-
-        <span><br/>文章长度为：{{content|mylen}}</span><br/>
-    </div>
+</div>
 </body>
 </html>
