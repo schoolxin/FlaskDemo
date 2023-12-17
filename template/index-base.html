@@ -1,4 +1,4 @@
-{% extends 'base.html' %}   {# 将当前页面继承至base.html母版 #}
+{% extends 'base.html' %}   {# 将当前页面继承至base.html母版 模板继承 #}
 {% block content %}
 
         <div class="col-sm-9 col-12" style="padding: 0 10px;" id="left">
@@ -89,7 +89,7 @@
 
         </div>
 
-        {# 按需引入side.html，首页需要 #}
+        {# 按需引入side.html，首页需要 模板引入 #}
         {% include 'side.html' %}
 
 {% endblock %}

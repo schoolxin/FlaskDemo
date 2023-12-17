@@ -5,7 +5,7 @@
 # @Function  :
 import os
 
-from flask import Flask
+from flask import Flask, abort
 
 app = Flask(__name__, template_folder='template', static_url_path='/', static_folder='resource')
 app.config['SECRET_KEY'] = os.urandom(24)  # 24位 生成随机数种子  用于产生sessionID
@@ -25,6 +25,27 @@ def mylen(str):
 
 
 app.jinja_env.filters.update(mylens=mylen)
+
+
+@app.route("/")
+def index():
+    return render_template("index-base.html")
+    # return render_template("article-base.html")
+
+
+# 定义404 错误页面
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error-404.html')
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error-500.html')
+
+@app.route("/error")
+def error_500():
+
+    return abort(500)
 
 if __name__ == "__main__":
     from controller.myhtml import *
