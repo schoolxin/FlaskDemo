@@ -15,8 +15,8 @@ conn.autocommit(True)
 cur = conn.cursor(cursor=SSDictCursor)
 
 # 2.定义SQL语句
-# sql = "select * from users where userid = 2"
-sql = "update users set qq='12345' where userid=2"
+sql = "select * from users where userid = 2"
+# sql = "update users set qq='12345' where userid=2"
 # 3.通过游标执行
 cur.execute(sql)
 # 4.处理执行结果
