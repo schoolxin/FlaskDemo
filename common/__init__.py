@@ -5,5 +5,6 @@
 # @Function  :
 
 
-if __name__ == "__main__":
-    run_code = 0
+print("sdd")
+def show():
+    print("show")
