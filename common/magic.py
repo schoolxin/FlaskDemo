@@ -36,6 +36,7 @@ if __name__ == "__main__":
     # 链式操作
     user.chain().chain()
     user.hello().chain()
+    print(User.__getattribute__(user,'table_name'))
 
 
     # 通过双下划线区分 是否为自定义属性或方法
