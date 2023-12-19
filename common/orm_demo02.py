@@ -20,6 +20,8 @@ class MYSQL:
 
     def insert(self, sql):
         self.cur.execute(sql)
+
+
 # 封装成标准的模型类 供子类继承
 # 增加field()方法来执行查询那些列，*代表所有列
 class Model:
@@ -29,15 +31,20 @@ class Model:
         for k, v in kwargs.items():
             self.__setattr__(k, v)
         print(self.__dict__)
+
     # 通过链式查询  操作指定的查询列
-    def field(self,columns):
-        self.columns = columns # 动态添加类实例属性
+    def field(self, columns):
+        self.columns = columns  # 动态添加类实例属性
         return self
+
     # 带列表的查询
     def select(self, **where):
         # print(len(where))
-        table = self.__class__.__getattribute__(self,'table_name')
-        sql = "select * from %s" % table
+        table = self.__class__.__getattribute__(self, 'table_name')
+        if hasattr(self, 'columns'):
+            sql = "select %s from %s" % (self.columns, table)
+        else:
+            sql = "select * from %s" % table
         if where:
             sql += " where "
             for k, v in where.items():
@@ -45,3 +52,31 @@ class Model:
             sql += "1=1"
         print(sql)
         return MYSQL().query(sql)
+
+    def insert(self):
+        # insert into table (k) values (v)
+        sql = "insert into %s " % self.table_name
+        keys = list(self.__dict__.keys())
+        print(type(keys))
+        values = list(self.__dict__.values())
+        print(','.join(keys))
+        print("','".join(values))
+        print(sql)
+        sql += "(" + ','.join(keys) + ") values('"
+        sql += "','".join(values) + "')"
+        print(sql)
+        MYSQL().insert(sql)
+
+
+# 定义子类
+class Users(Model):
+    table_name = "users"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+user = Users()
+# print(user.__getattribute__("table_name"))
+result = user.field('userid,username').select(userid=1)
+print(result)
