@@ -20,6 +20,7 @@ app.config['SECRET_KEY'] = os.urandom(24)  # 24位 生成随机数种子  用于
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:000000@hadoop102:3306/woniunote?charset=utf8'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 跟踪数据库的修改 及时发送信号给Flask
 app.config['SQLALCHEMY_ECHO'] = True  # 跟踪数据库的修改 及时发送信号给Flask
+app.config['JSON_AS_ASCII'] = False
 # 初始化数据库
 db.init_app(app)  # Flask环境跟db绑定了
 # metadata = MetaData()

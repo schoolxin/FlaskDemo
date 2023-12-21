@@ -11,4 +11,5 @@ class Articles(db.Model):
     userid = db.Column(db.Integer)
     content = db.Column(db.String(1024))
     credit = db.Column(db.Integer)
+    headline = db.Column(db.String(64))
     readcount = db.Column(db.Integer)

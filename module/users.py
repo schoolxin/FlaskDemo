@@ -4,10 +4,11 @@
 # @Author    :dzz
 # @Function  :
 # from common.database import db
-from sqlalchemy import Table, or_, func
+from sqlalchemy import Table, or_, func, and_, text
 
 from main import db
 from module.article import Articles
+from module.comment import comment
 
 
 class Users(db.Model):
@@ -21,11 +22,11 @@ class Users(db.Model):
     role = db.Column(db.String(32))
     credit = db.Column(db.String(32))
 
-    def __str__(self):
-        return self.username
+    # def __str__(self):
+    #     return self.username
 
-    def __repr__(self):
-        return self.username + "=--->" + str(self.userid) + "=--->" + str(self.qq)
+    # def __repr__(self):
+    #     return self.username + "=--->" + str(self.userid) + "=--->" + str(self.qq)
 
     def find_user_byId(self, userid):
         # row = db.session.query(Users).filter(Users.userid==userid).first()
@@ -59,7 +60,29 @@ class Users(db.Model):
         # 聚合函数
         # res1 = db.session.query(func.sum(Users.credit).label('cnt'),Users.qq).group_by(Users.qq).all()
         # 关联查询
-        res1 = db.session.query(Articles,Users).join(Users,Articles.userid==Users.userid).limit(2).all()
+        # 1.内连接
+        # res1 = db.session.query(Articles,Users).join(Users,Articles.userid==Users.userid).filter(Articles.articleid==1).all()
+        # res1 = db.session.query(Articles.articleid,Articles.headline,Users.nickname).join(Users,Articles.userid==Users.userid).filter(Articles.articleid==1).all()
+        # res1 = db.session.query(Articles.articleid,Articles.headline,Users.nickname).join(Users,Articles.userid==Users.userid).all()
+        # 2.外链接
+        # res1 = db.session.query(Articles.articleid,Articles.headline,Users.nickname).outerjoin(Articles,Articles.userid==Users.userid).filter(Users.userid==10)
+        # res1 = db.session.query(Users.nickname,func.sum(Articles.readcount).label('total_cnt')).outerjoin(Articles,Articles.userid==Users.userid).group_by(Users.nickname).all()
+        # 复杂查询 username like 'qiang' or (userid>3 and nickname ='reader3')
+
+        # res1 = db.session.query(Users).filter(or_(Users.username.like("%qiang%"),and_(Users.userid>3,Users.nickname=='reader3'))).all()
+        # res1 = db.session.query(comment.createtime,comment.userid,comment.agreecount).all()
+        # 删除
+        # db.session.query(Users).filter(Users.userid==10).delete()
+        # db.session.commit()
+        # 利用SQLAlchemy执行原始SQL
+        res1 = db.session.execute(text('select * from users')).fetchall()
         print(res1)
 
         return res[0].nickname
+    def find_all_user(self):
+        res = db.session.query(Users).all()
+        return  res
+    def query_user_article(self):
+        res1 = db.session.query(Articles, Users).join(Users,Articles.userid == Users.userid).limit(2)
+
+        return res1
